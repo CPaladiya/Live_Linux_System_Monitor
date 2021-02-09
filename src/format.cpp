@@ -4,7 +4,7 @@
 
 using std::string;
 
-// CppND - I have implemented this function//
+// ---------------CppND - I have implemented this function--------------------//
 
 // INPUT: Long int measuring seconds
 // OUTPUT: HH:MM:SS
@@ -22,9 +22,9 @@ string Format::ElapsedTime(long seconds[[maybe_unused]]) {
     std::string time_string, hrs_string, min_string, sec_string;
 	
     //adding 0 if hrs,nin or sec is less than 10 to maintain HH:MM:SS format
-	if (hrs<10){hrs_string = "0"+std::to_string(hrs);} 
-	if (min<10){min_string = "0"+std::to_string(min);}
-	if (sec<10){sec_string = "0"+std::to_string(sec);}
+	hrs_string = hrs<10 ? "0"+std::to_string(hrs) : std::to_string(hrs);  
+    min_string = min<10 ? "0"+std::to_string(min) : std::to_string(min); 
+    sec_string = sec<10 ? "0"+std::to_string(sec) : std::to_string(sec); 
     time_string = hrs_string + ":" + min_string + ":" + sec_string;
 
     return time_string;
