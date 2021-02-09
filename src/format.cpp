@@ -4,8 +4,28 @@
 
 using std::string;
 
-// TODO: Complete this helper function
+// CppND - I have implemented this function//
+
 // INPUT: Long int measuring seconds
 // OUTPUT: HH:MM:SS
 // REMOVE: [[maybe_unused]] once you define the function
-string Format::ElapsedTime(long seconds[[maybe_unused]]) { return string(); }
+string Format::ElapsedTime(long seconds[[maybe_unused]]) { 
+    
+    long int hrs,min,sec; //defining hours,minutes,seconds
+    long int after_hrs; //defining qty remaining after calculating hours and minutes
+    hrs = seconds/3600; //getting the hours
+    after_hrs = seconds%3600; //remaining seconds off of the hours we got just above
+    min = after_hrs/60; //getting minutes
+    sec = after_hrs%60; //getting seconds
+    
+    //defining string for all the variables
+    std::string time_string, hrs_string, min_string, sec_string;
+	
+    //adding 0 if hrs,nin or sec is less than 10 to maintain HH:MM:SS format
+	if (hrs<10){hrs_string = "0"+std::to_string(hrs);} 
+	if (min<10){min_string = "0"+std::to_string(min);}
+	if (sec<10){sec_string = "0"+std::to_string(sec);}
+    time_string = hrs_string + ":" + min_string + ":" + sec_string;
+
+    return time_string;
+ }
