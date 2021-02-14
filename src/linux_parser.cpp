@@ -71,15 +71,15 @@ vector<int> LinuxParser::Pids() {
 float LinuxParser::MemoryUtilization() { 
   string line;
 	string key;
-	float value; //converting string into float at the same time using linestream
-	float TotalMem;
-	float FreeMem;
-	float UsedMem;
+	int value; //converting string into float at the same time using linestream
+	int TotalMem;
+	int FreeMem;
+	int UsedMem;
 	string UsedMem_string;
 	std::ifstream filestream(kProcDirectory + kMeminfoFilename);
 	if (filestream.is_open()){
 		while(std::getline(filestream, line)){ //MemTotal:    7918692 KB
-			std::replace(line.begin(), line.end(), ' ', '_'); //MemTotal:_____7918692_KB
+			std::replace(line.begin(), line.end(), ' ', '_'); //MemTotal:_____7918692_KB, can not use "", only use ''
 			std::replace(line.begin(), line.end(), ':', ' ');//MemTotal _____7918692_KB
 			line.erase(line.end()-3, line.end()); //MemTotal _____7918692
 			line.erase(std::remove(line.begin(),line.end(),'_'),line.end()); //MemTotal 7918692
