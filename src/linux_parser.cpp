@@ -99,7 +99,21 @@ float LinuxParser::MemoryUtilization() {
 }
 
 // TODO: Read and return the system uptime
-long LinuxParser::UpTime() { return 0; }
+long LinuxParser::UpTime() { 
+  string line;
+  long double TotalUpTime; //converting string into long int at the same time using linestream
+	long double IdleTime;
+  long double UpTime;
+	std::ifstream filestream(kProcDirectory + kUptimeFilename);
+	if (filestream.is_open()){
+		while(std::getline(filestream, line)){ //13145.68 43993.58 - Up time of the system, idle time of the system
+			std::stringstream linestream(line);
+			linestream>>TotalUpTime>>IdleTime;	
+		}
+    UpTime = TotalUpTime - IdleTime;
+  }
+  return UpTime;
+}
 
 // TODO: Read and return the number of jiffies for the system
 long LinuxParser::Jiffies() { return 0; }
