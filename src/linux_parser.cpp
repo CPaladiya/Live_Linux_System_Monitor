@@ -116,22 +116,7 @@ long LinuxParser::UpTime() {
 }
 
 // TODO: Read and return the number of jiffies for the system
-long LinuxParser::Jiffies() { 
-  string line,cpu;
-  long int user, nice, system, idle, iowait, irq, softirq,steal,guest,guest_nice;
-  long int jiffies_system;
-  std::ifstream filestream(kProcDirectory + kStatFilename);
-  if (filestream.is_open()){
-    while(std::getline(filestream, line)){
-        std::stringstream linestream(line);
-        while(linestream>>cpu>>user>> nice>> system>>idle>>iowait>>irq>>softirq>>steal>>guest>>guest_nice){
-          if(cpu == "cpu"){
-            jiffies_system = user + nice + system + idle + iowait + irq + softirq + steal + guest + guest_nice;
-          }
-        }
-      }
-    }
-  return jiffies_system; 
+long LinuxParser::Jiffies() { return 0.0;
 }
 
 // TODO: Read and return the number of active jiffies for a PID
@@ -144,8 +129,28 @@ long LinuxParser::ActiveJiffies() { return 0; }
 // TODO: Read and return the number of idle jiffies for the system
 long LinuxParser::IdleJiffies() { return 0; }
 
-// TODO: Read and return CPU utilization
-vector<string> LinuxParser::CpuUtilization() { return {}; }
+// I Implemented : Read and return CPU utilization --------------------------------
+vector<long int> LinuxParser::CpuUtilization() { 
+  string line;
+  long int value;
+  string title_of_line;
+  vector<long int> CpuLoad;
+  std::ifstream filestream (kProcDirectory + kStatFilename);
+  if (filestream.is_open()){
+    while(getline(filestream, line)){
+      std::stringstream linestream(line);
+      linestream >> title_of_line;
+      if(title_of_line == "cpu"){
+        for(int i = 0 ; i<10 ; i++){
+          linestream >> value;
+          CpuLoad.push_back(value);
+        }
+      }
+
+    }
+  }
+  return CpuLoad; 
+}
 
 // TODO: Read and return the total number of processes
 int LinuxParser::TotalProcesses() { return 0; }
