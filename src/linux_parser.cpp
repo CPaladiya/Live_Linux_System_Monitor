@@ -36,13 +36,13 @@ string LinuxParser::OperatingSystem() {
 
 // DONE: An example of how to read data from the filesystem
 string LinuxParser::Kernel() {
-  string os, kernel;
+  string os, version, kernel;
   string line;
   std::ifstream stream(kProcDirectory + kVersionFilename);
   if (stream.is_open()) {
     std::getline(stream, line);
     std::istringstream linestream(line);
-    linestream >> os >> kernel;
+    linestream >> os >> version >> kernel;
   }
   return kernel;
 }
@@ -67,7 +67,7 @@ vector<int> LinuxParser::Pids() {
   return pids;
 }
 
-// TODO: Read and return the system memory utilization
+// I implemented: Read and return the system memory utilization -------------------------------------
 float LinuxParser::MemoryUtilization() { 
   string line;
 	string key;
@@ -98,7 +98,7 @@ float LinuxParser::MemoryUtilization() {
 	return UsedMem;
 }
 
-// TODO: Read and return the system uptime
+// I implemented Read and return the system uptime ---------------------------------
 long LinuxParser::UpTime() { 
   string line;
   long double TotalUpTime; //converting string into long int at the same time using linestream
@@ -116,7 +116,23 @@ long LinuxParser::UpTime() {
 }
 
 // TODO: Read and return the number of jiffies for the system
-long LinuxParser::Jiffies() { return 0; }
+long LinuxParser::Jiffies() { 
+  string line,cpu;
+  long int user, nice, system, idle, iowait, irq, softirq,steal,guest,guest_nice;
+  long int jiffies_system;
+  std::ifstream filestream(kProcDirectory + kStatFilename);
+  if (filestream.is_open()){
+    while(std::getline(filestream, line)){
+        std::stringstream linestream(line);
+        while(linestream>>cpu>>user>> nice>> system>>idle>>iowait>>irq>>softirq>>steal>>guest>>guest_nice){
+          if(cpu == "cpu"){
+            jiffies_system = user + nice + system + idle + iowait + irq + softirq + steal + guest + guest_nice;
+          }
+        }
+      }
+    }
+  return jiffies_system; 
+}
 
 // TODO: Read and return the number of active jiffies for a PID
 // REMOVE: [[maybe_unused]] once you define the function
