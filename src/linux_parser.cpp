@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <string>
 #include <vector>
-#include <algorithm> //for remove 
+//#include <algorithm> //for remove 
 #include <numeric> //for std::accumulate - summing up the vector
 
 #include "linux_parser.h"
@@ -80,10 +80,10 @@ float LinuxParser::MemoryUtilization() {
 	std::ifstream filestream(kProcDirectory + kMeminfoFilename);
 	if (filestream.is_open()){
 		while(std::getline(filestream, line)){ //MemTotal:    7918692 KB
-			std::replace(line.begin(), line.end(), ' ', '_'); //MemTotal:_____7918692_KB, can not use "", only use ''
-			std::replace(line.begin(), line.end(), ':', ' ');//MemTotal _____7918692_KB
-			line.erase(line.end()-3, line.end()); //MemTotal _____7918692
-			line.erase(std::remove(line.begin(),line.end(),'_'),line.end()); //MemTotal 7918692
+			//std::replace(line.begin(), line.end(), ' ', '_'); //MemTotal:_____7918692_KB, can not use "", only use ''
+			//std::replace(line.begin(), line.end(), ':', ' ');//MemTotal _____7918692_KB
+			//line.erase(line.end()-3, line.end()); //MemTotal _____7918692
+			//line.erase(std::remove(line.begin(),line.end(),'_'),line.end()); //MemTotal 7918692
 			std::stringstream linestream(line);
 			while(linestream>>key>>value){
 				if (key == "MemTotal"){
@@ -242,7 +242,24 @@ string LinuxParser::Ram(int pid) {
 
 // TODO: Read and return the user ID associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Uid(int pid[[maybe_unused]]) { return string(); }
+string LinuxParser::Uid(int pid) { 
+  string pidString;
+  pidString = std::to_string(pid);
+  string line;
+  string UserID;
+  string title_of_line;
+  std::ifstream filestream (kProcDirectory + pidString + kStatusFilename);
+  if (filestream.is_open()){
+    while(getline(filestream, line)){
+      std::stringstream linestream(line);
+      linestream >> title_of_line;
+      if(title_of_line == "uid:"){
+        linestream >> UserID;
+        return UserID;
+      }
+    }
+  }return UserID; 
+}
 
 // TODO: Read and return the user associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
