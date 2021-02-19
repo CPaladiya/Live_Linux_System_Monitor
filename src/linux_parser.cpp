@@ -170,7 +170,7 @@ vector<long int> LinuxParser::CpuUtilization() {
   }return CpuLoad; 
 }
 
-// TODO: Read and return the total number of processes
+// I implemented : Read and return the total number of processes -----------------------------------
 int LinuxParser::TotalProcesses() { 
   string line;
   int totalProcesses;
@@ -188,7 +188,7 @@ int LinuxParser::TotalProcesses() {
   }return totalProcesses; 
 }
 
-// TODO: Read and return the number of running processes
+// I implemented : Read and return the number of running processes -------------------------------------
 int LinuxParser::RunningProcesses() { 
   string line;
   int runningProcesses;
@@ -206,8 +206,7 @@ int LinuxParser::RunningProcesses() {
   }return runningProcesses; 
 }
 
-// TODO: Read and return the command associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
+// I implemented : Read and return the command associated with a process -----------------------------------------
 string LinuxParser::Command(int pid) { 
   string pidString;
   pidString = std::to_string(pid);
@@ -221,8 +220,7 @@ string LinuxParser::Command(int pid) {
     }return commandLine;
   }
 
-// TODO: Read and return the memory used by a process
-// REMOVE: [[maybe_unused]] once you define the function
+// I implemented : Read and return the memory used by a process ---------------------------------------------
 string LinuxParser::Ram(int pid) { 
   string pidString;
   pidString = std::to_string(pid);
