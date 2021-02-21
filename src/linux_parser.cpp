@@ -127,7 +127,25 @@ long LinuxParser::Jiffies() {
 
 // TODO: Read and return the number of active jiffies for a PID
 // REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::ActiveJiffies(int pid[[maybe_unused]]) { return 0; }
+long LinuxParser::ActiveJiffies(int pid) { 
+  string pidString;
+  pidString = std::to_string(pid);
+  string line;
+  long int value;
+  long int activeJiffies;
+  vector<long int> statFile;
+  std::ifstream filestream (kProcDirectory + pidString + kStatFilename);
+  if (filestream.is_open()){
+    getline(filestream, line);
+    std::stringstream linestream(line);
+    while(linestream>>value){
+      statFile.push_back(value);
+    } 
+  } activeJiffies = (statFile[13]+statFile[14]+statFile[15]+statFile[16])/sysconf(_SC_CLK_TCK); 
+  //nth element - its description, 14th - uTime, 15th - sTime, 16th - cuTime, 17th - csTime, 
+  //all in clock ticks and converted into seconds with sysconf
+  return activeJiffies; 
+}
 
 // I implemented : Read and return the number of active jiffies for the system -----------------------------------
 long LinuxParser::ActiveJiffies() { 
@@ -240,8 +258,7 @@ string LinuxParser::Ram(int pid) {
   }return usedRam; 
 }
 
-// TODO: Read and return the user ID associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
+// I implemented: Read and return the user ID associated with a process --------------------------------------------
 string LinuxParser::Uid(int pid) { 
   string pidString;
   pidString = std::to_string(pid);
@@ -261,10 +278,49 @@ string LinuxParser::Uid(int pid) {
   }return UserID; 
 }
 
-// TODO: Read and return the user associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::User(int pid[[maybe_unused]]) { return string(); }
+// I implemented : Read and return the user associated with a process ------------------------------------
+string LinuxParser::User(int pid) { 
+  string line;
+  int FirstOccur; //to find first occurance of ":"
+  int SecondOccur; //to find second occurance of ":"
+  int ThirdOccur; //to find third occurance of ":"
+  string pid_ID; //to store extracted pid_ID from line
+  int FirstLetterPID; //Index of first letter of PID ID
+  int LengthPID; //Length of PID interm of character
+  char separator[] = ":";  //defined separator within the line
+  string user_for_process; //user associated with process
+  std::ifstream filestream (kProcDirectory + kPasswordPath);
+  if (filestream.is_open()){
+    while(getline(filestream, line)){
+      FirstOccur = line.find(separator);  //index of first occurance of ":"
+      SecondOccur = line.find(separator, FirstOccur+1); //index of second occurance of ":"
+      ThirdOccur = line.find(separator,SecondOccur+1); //index of third occurance of ":"
+      FirstLetterPID = SecondOccur + 1; 
+      LengthPID = ThirdOccur-SecondOccur-1;
+      pid_ID = line.substr(FirstLetterPID,LengthPID); //extracting pid_ID of line
+      if(pid_ID == LinuxParser::Uid(pid)){ //comparing pid_ID with userID of pid we are interested in
+        user_for_process = line.substr(0,FirstOccur); //if a match, returning user associated with process
+      }
+    }
+  }return user_for_process;
+}
 
-// TODO: Read and return the uptime of a process
-// REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::UpTime(int pid[[maybe_unused]]) { return 0; }
+// I implemented : Read and return the uptime of a process ----------------------------------------------
+long LinuxParser::UpTime(int pid) { 
+  string pidString;
+  pidString = std::to_string(pid);
+  string line;
+  long int value;
+  long int upTime;
+  vector<long int> statFile;
+  std::ifstream filestream (kProcDirectory + pidString + kStatFilename);
+  if (filestream.is_open()){
+    getline(filestream, line);
+    std::stringstream linestream(line);
+    while(linestream>>value){
+      statFile.push_back(value);
+    } 
+  } upTime = statFile[21]/sysconf(_SC_CLK_TCK); //22th element in the statFile vector is uptime clock ticks
+  //converting clockticks in to seconds at the same time
+  return upTime; 
+}
