@@ -72,18 +72,18 @@ vector<int> LinuxParser::Pids() {
 float LinuxParser::MemoryUtilization() { 
   string line;
 	string key;
-	int value; //converting string into float at the same time using linestream
-	int TotalMem;
-	int FreeMem;
-	int UsedMem;
+	float value; //converting string into float at the same time using linestream
+	float TotalMem;
+	float FreeMem;
+	float UsedMem;
 	string UsedMem_string;
 	std::ifstream filestream(kProcDirectory + kMeminfoFilename);
 	if (filestream.is_open()){
 		while(std::getline(filestream, line)){ //MemTotal:    7918692 KB
-			//std::replace(line.begin(), line.end(), ' ', '_'); //MemTotal:_____7918692_KB, can not use "", only use ''
-			//std::replace(line.begin(), line.end(), ':', ' ');//MemTotal _____7918692_KB
-			//line.erase(line.end()-3, line.end()); //MemTotal _____7918692
-			//line.erase(std::remove(line.begin(),line.end(),'_'),line.end()); //MemTotal 7918692
+			std::replace(line.begin(), line.end(), ' ', '_'); //MemTotal:_____7918692_KB, can not use "", only use ''
+			std::replace(line.begin(), line.end(), ':', ' ');//MemTotal _____7918692_KB
+			line.erase(line.end()-3, line.end()); //MemTotal _____7918692
+			line.erase(std::remove(line.begin(),line.end(),'_'),line.end()); //MemTotal 7918692
 			std::stringstream linestream(line);
 			while(linestream>>key>>value){
 				if (key == "MemTotal"){
@@ -96,15 +96,16 @@ float LinuxParser::MemoryUtilization() {
 			}
 		}
 	UsedMem = TotalMem-FreeMem;
+  UsedMem = UsedMem/TotalMem;
 	return UsedMem;
 }
 
 // I implemented : Read and return the system uptime ---------------------------------
 long LinuxParser::UpTime() { 
   string line;
-  long double TotalUpTime; //converting string into long int at the same time using linestream
-	long double IdleTime;
-  long double UpTime;
+  long int TotalUpTime; //converting string into long int at the same time using linestream
+	long int IdleTime;
+  long int UpTime;
 	std::ifstream filestream(kProcDirectory + kUptimeFilename);
 	if (filestream.is_open()){
 		while(std::getline(filestream, line)){ //13145.68 43993.58 - Up time of the system, idle time of the system
