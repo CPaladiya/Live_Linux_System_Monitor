@@ -22,11 +22,11 @@ Processor& System::Cpu() {
 // TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() { 
     vector<int> ListofPIDs = LinuxParser::Pids();
-    for (int pid : ListofPIDs){
-        Process process(pid);
+    for (const int pid : ListofPIDs){
+        Process process(pid); //creating new Process object everytime with set pid value
         processes_.push_back(process);
     }
-    processes_;
+    return processes_;
 }
 
 // I implemented: Return the system's kernel identifier (string)-----------------
