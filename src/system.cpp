@@ -3,6 +3,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <algorithm> //for sorting the vector
 
 #include "process.h"
 #include "processor.h"
@@ -26,6 +27,7 @@ vector<Process>& System::Processes() {
         Process process(pid); //creating new Process object everytime with set pid value
         processes_.push_back(process);
     }
+    std::sort(processes_.begin(),processes_.end());
     return processes_;
 }
 

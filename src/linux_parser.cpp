@@ -244,7 +244,10 @@ string LinuxParser::Ram(int pid) {
   string pidString;
   pidString = std::to_string(pid);
   string line;
-  string usedRam;
+  string RamString;
+  float UsedRamKB;
+  float UsedRamMB;
+  string Ram;
   string title_of_line;
   std::ifstream filestream (kProcDirectory + pidString + kStatusFilename);
   if (filestream.is_open()){
@@ -252,11 +255,13 @@ string LinuxParser::Ram(int pid) {
       std::stringstream linestream(line);
       linestream >> title_of_line;
       if(title_of_line == "vmSize:"){
-        linestream >> usedRam;
-        return usedRam;
+        linestream >> UsedRamKB;
+        UsedRamMB = UsedRamKB/1024;
+        Ram = std::to_string(UsedRamMB);
+        return Ram;
       }
     }
-  }return usedRam; 
+  }return Ram; 
 }
 
 // I implemented: Read and return the user ID associated with a process --------------------------------------------
