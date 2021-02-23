@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <math.h>
 
 #include "process.h"
 #include "linux_parser.h"
@@ -28,7 +29,7 @@ string Process::Command() { return LinuxParser::Command(PID_); }
 string Process::Ram() { 
     string ram = LinuxParser::Ram(PID_);
     std::stringstream ramstream(ram);
-    ramstream >> ram_;
+    ramstream >> ram_; //storing value of Ram into private float variable ram_
     return ram; }
 
 // TODO: Return the user (name) that generated this process
@@ -39,4 +40,5 @@ long int Process::UpTime() { return LinuxParser::UpTime(PID_); }
 
 // TODO: Overload the "less than" comparison operator for Process objects
 bool Process::operator<(Process const& a) const { 
-    return this->ram_ > a.ram_;}
+    return (a.ram_< this->ram_) ;
+    }

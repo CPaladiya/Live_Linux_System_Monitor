@@ -1,7 +1,9 @@
 #include <dirent.h>
+#include <iostream>
 #include <unistd.h>
 #include <string>
 #include <vector>
+#include <math.h> //to include roundof
 //#include <algorithm> //for remove 
 #include <numeric> //for std::accumulate - summing up the vector
 
@@ -245,18 +247,22 @@ string LinuxParser::Ram(int pid) {
   pidString = std::to_string(pid);
   string line;
   string RamString;
-  float UsedRamKB;
-  float UsedRamMB;
+  long int UsedRamKB;
+  long int UsedRamMB;
   string Ram;
   string title_of_line;
   std::ifstream filestream (kProcDirectory + pidString + kStatusFilename);
   if (filestream.is_open()){
     while(getline(filestream, line)){
+      std::replace(line.begin(), line.end(), ' ', '_'); //vmSize:_____7918692_KB, can not use "", only use ''
+			std::replace(line.begin(), line.end(), ':', ' ');//vmSize _____7918692_KB
+			line.erase(line.end()-3, line.end()); //vmSize _____7918692
+			line.erase(std::remove(line.begin(),line.end(),'_'),line.end()); //vmSize 7918692 
       std::stringstream linestream(line);
-      linestream >> title_of_line;
-      if(title_of_line == "vmSize:"){
-        linestream >> UsedRamKB;
+      linestream >> title_of_line >> UsedRamKB;
+      if(title_of_line == "VmSize"){
         UsedRamMB = UsedRamKB/1024;
+        //UsedRamMB = roundf(UsedRamMB * 100)/100;
         Ram = std::to_string(UsedRamMB);
         return Ram;
       }
@@ -275,9 +281,8 @@ string LinuxParser::Uid(int pid) {
   if (filestream.is_open()){
     while(getline(filestream, line)){
       std::stringstream linestream(line);
-      linestream >> title_of_line;
-      if(title_of_line == "uid:"){
-        linestream >> UserID;
+      linestream >> title_of_line >> UserID;
+      if(title_of_line == "Uid:"){
         return UserID;
       }
     }
@@ -288,6 +293,7 @@ string LinuxParser::Uid(int pid) {
 string LinuxParser::User(int pid) { 
   string line;
   int FirstOccur; //to find first occurance of ":"
+  string Uid = LinuxParser::Uid(pid);
   int SecondOccur; //to find second occurance of ":"
   int ThirdOccur; //to find third occurance of ":"
   string pid_ID; //to store extracted pid_ID from line
@@ -295,7 +301,7 @@ string LinuxParser::User(int pid) {
   int LengthPID; //Length of PID interm of character
   char separator[] = ":";  //defined separator within the line
   string user_for_process; //user associated with process
-  std::ifstream filestream (kProcDirectory + kPasswordPath);
+  std::ifstream filestream (kPasswordPath);
   if (filestream.is_open()){
     while(getline(filestream, line)){
       FirstOccur = line.find(separator);  //index of first occurance of ":"
@@ -304,8 +310,9 @@ string LinuxParser::User(int pid) {
       FirstLetterPID = SecondOccur + 1; 
       LengthPID = ThirdOccur-SecondOccur-1;
       pid_ID = line.substr(FirstLetterPID,LengthPID); //extracting pid_ID of line
-      if(pid_ID == LinuxParser::Uid(pid)){ //comparing pid_ID with userID of pid we are interested in
+      if(pid_ID == Uid){ //comparing pid_ID with userID of pid we are interested in
         user_for_process = line.substr(0,FirstOccur); //if a match, returning user associated with process
+        return user_for_process;
       }
     }
   }return user_for_process;
@@ -316,17 +323,18 @@ long LinuxParser::UpTime(int pid) {
   string pidString;
   pidString = std::to_string(pid);
   string line;
-  long int value;
+  string value;
   long int upTime;
-  vector<long int> statFile;
+  vector<string> statFile;
   std::ifstream filestream (kProcDirectory + pidString + kStatFilename);
   if (filestream.is_open()){
     getline(filestream, line);
     std::stringstream linestream(line);
     while(linestream>>value){
       statFile.push_back(value);
-    } 
-  } upTime = statFile[21]/sysconf(_SC_CLK_TCK); //22th element in the statFile vector is uptime clock ticks
+    } upTime = std::stoi(statFile[21])/sysconf(_SC_CLK_TCK); //22th element in the statFile vector is uptime clock ticks
+    
+    return upTime;
+  } 
   //converting clockticks in to seconds at the same time
-  return upTime; 
 }
