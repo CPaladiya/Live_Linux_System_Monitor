@@ -23,9 +23,8 @@ Processor& System::Cpu() {
 // TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() { 
     vector<int> ListofPIDs = LinuxParser::Pids();
-    for (const int pid : ListofPIDs){
-        Process process(pid); //creating new Process object everytime with set pid value
-        processes_.push_back(process);
+    for (const int pid : ListofPIDs){ //creating new Process object everytime with set pid value
+        processes_.emplace_back(pid);
     }
     std::sort(processes_.begin(),processes_.end());
     return processes_;
