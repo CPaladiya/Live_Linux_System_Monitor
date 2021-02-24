@@ -5,9 +5,6 @@
 // TODO: Return the aggregate CPU utilization
 float Processor::Utilization() { 
 
-    TotalLoadPrev = LinuxParser::Jiffies();
-    IdleLoadPrev = LinuxParser::IdleJiffies();
-    sleep(0.25);
     TotalLoadNext = LinuxParser::Jiffies();
     IdleLoadNext = LinuxParser::IdleJiffies();
     TotalLoad = TotalLoadNext - TotalLoadPrev;
@@ -16,4 +13,8 @@ float Processor::Utilization() {
         utilization = (TotalLoad-IdleLoad)/TotalLoad;
         return utilization;
         }
+    sleep(0.5);
+    TotalLoadPrev = TotalLoadNext;
+    IdleLoadPrev = IdleLoadNext;
+    
     }
