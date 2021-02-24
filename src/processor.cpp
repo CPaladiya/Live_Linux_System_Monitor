@@ -7,7 +7,7 @@ float Processor::Utilization() {
 
     TotalLoadPrev = LinuxParser::Jiffies();
     IdleLoadPrev = LinuxParser::IdleJiffies();
-    //sleep(0.5);
+    sleep(0.25);
     TotalLoadNext = LinuxParser::Jiffies();
     IdleLoadNext = LinuxParser::IdleJiffies();
     TotalLoad = TotalLoadNext - TotalLoadPrev;

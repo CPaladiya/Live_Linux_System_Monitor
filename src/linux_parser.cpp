@@ -6,6 +6,7 @@
 #include <math.h> //to include roundof
 //#include <algorithm> //for remove 
 #include <numeric> //for std::accumulate - summing up the vector
+#include <bits/stdc++.h> //for std::stof
 
 #include "linux_parser.h"
 
@@ -129,14 +130,13 @@ long LinuxParser::Jiffies() {
 }
 
 // TODO: Read and return the number of active jiffies for a PID
-// REMOVE: [[maybe_unused]] once you define the function
 long LinuxParser::ActiveJiffies(int pid) { 
   string pidString;
   pidString = std::to_string(pid);
   string line;
-  long int value;
+  string value;
   long int activeJiffies;
-  vector<long int> statFile;
+  vector<string> statFile;
   std::ifstream filestream (kProcDirectory + pidString + kStatFilename);
   if (filestream.is_open()){
     getline(filestream, line);
@@ -144,7 +144,8 @@ long LinuxParser::ActiveJiffies(int pid) {
     while(linestream>>value){
       statFile.push_back(value);
     } 
-  } activeJiffies = (statFile[13]+statFile[14]+statFile[15]+statFile[16])/sysconf(_SC_CLK_TCK); 
+  } activeJiffies = (std::stoi(statFile[13])+ std::stoi(statFile[14])+
+                    std::stoi(statFile[15])+std::stoi(statFile[16])); 
   //nth element - its description, 14th - uTime, 15th - sTime, 16th - cuTime, 17th - csTime, 
   //all in clock ticks and converted into seconds with sysconf
   return activeJiffies; 
@@ -333,8 +334,6 @@ long LinuxParser::UpTime(int pid) {
     while(linestream>>value){
       statFile.push_back(value);
     } upTime = std::stoi(statFile[21])/sysconf(_SC_CLK_TCK); //22th element in the statFile vector is uptime clock ticks
-    
-    return upTime;
-  } 
+  } return upTime;
   //converting clockticks in to seconds at the same time
 }

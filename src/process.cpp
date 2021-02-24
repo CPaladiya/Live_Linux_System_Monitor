@@ -6,6 +6,7 @@
 #include <iostream>
 #include <sstream>
 #include <math.h>
+#include <bits/stdc++.h>
 
 #include "process.h"
 #include "linux_parser.h"
@@ -20,7 +21,14 @@ int Process::Pid() {
 
 // TODO: Return this process's CPU utilization
 float Process::CpuUtilization() { 
-    return 0; }
+    float uptime = LinuxParser::UpTime(PID_);
+    float ActiveJiffSecs = LinuxParser::ActiveJiffies(PID_);
+    float Sysuptime = LinuxParser::UpTime();
+    float seconds = (Sysuptime - uptime);
+    float CPU_Use;
+    if (seconds > 0) CPU_Use = ActiveJiffSecs/(seconds*sysconf(_SC_CLK_TCK));
+    return CPU_Use;
+    }
 
 // TODO: Return the command that generated this process
 string Process::Command() { return LinuxParser::Command(PID_); }
