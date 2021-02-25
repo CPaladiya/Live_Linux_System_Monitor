@@ -9,12 +9,10 @@ float Processor::Utilization() {
     IdleLoadNext = LinuxParser::IdleJiffies();
     TotalLoad = TotalLoadNext - TotalLoadPrev;
     IdleLoad = IdleLoadNext - IdleLoadPrev;
-    if(TotalLoad>0){ //checking totoal load is not zero to avoid errors!
-        utilization = (TotalLoad-IdleLoad)/TotalLoad;
-        return utilization;
-        }
     sleep(0.5); //sleepin system for 0.5 sec to assess change in CPU usage
     TotalLoadPrev = TotalLoadNext;
     IdleLoadPrev = IdleLoadNext;
-    
+    if(TotalLoad>0){ //checking totoal load is not zero to avoid errors!
+        utilization = (TotalLoad-IdleLoad)/TotalLoad;
+        }return utilization;
     }
