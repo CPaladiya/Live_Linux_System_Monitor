@@ -143,8 +143,8 @@ long LinuxParser::ActiveJiffies(int pid) {
     while(linestream>>value){
       statFile.push_back(value);
     } 
-  } activeJiffies = (std::stoi(statFile[13])+ std::stoi(statFile[14])+
-                    std::stoi(statFile[15])+std::stoi(statFile[16])); 
+  } activeJiffies = (std::stol(statFile[13])+ std::stol(statFile[14])+
+                    std::stol(statFile[15])+std::stol(statFile[16])); 
   //nth element - its description, 14th - uTime, 15th - sTime, 16th - cuTime, 17th - csTime, 
   //all in clock ticks and converted into seconds with sysconf
   return activeJiffies; 
@@ -332,7 +332,7 @@ long LinuxParser::UpTime(int pid) {
     std::stringstream linestream(line);
     while(linestream>>value){
       statFile.push_back(value);
-    } upTime = std::stoi(statFile[21])/sysconf(_SC_CLK_TCK); //22th element in the statFile vector is uptime clock ticks
+    } upTime = std::stol(statFile[21])/sysconf(_SC_CLK_TCK); //22th element in the statFile vector is uptime clock ticks
   } return upTime;
   //converting clockticks in to seconds at the same time
 }
