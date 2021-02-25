@@ -3,8 +3,7 @@
 #include <unistd.h>
 #include <string>
 #include <vector>
-#include <math.h> //to include roundof
-//#include <algorithm> //for remove 
+#include <math.h> 
 #include <numeric> //for std::accumulate - summing up the vector
 #include <bits/stdc++.h> //for std::stof
 
@@ -129,7 +128,7 @@ long LinuxParser::Jiffies() {
   return jiffies;
 }
 
-// TODO: Read and return the number of active jiffies for a PID
+// I implemented: Read and return the number of active jiffies for a PID ----------------------
 long LinuxParser::ActiveJiffies(int pid) { 
   string pidString;
   pidString = std::to_string(pid);
