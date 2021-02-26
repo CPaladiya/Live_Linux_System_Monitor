@@ -23,6 +23,7 @@ Processor& System::Cpu() {
 // I implemented : Return a container composed of the system's processes
 vector<Process>& System::Processes() { 
     vector<int> ListofPIDs = LinuxParser::Pids();
+    process_.clear(); //clearing any element leftover from last call of the vector to stop seg error!
     for (const int pid : ListofPIDs){ //creating new Process object everytime with set pid value
         processes_.emplace_back(pid);
     }
