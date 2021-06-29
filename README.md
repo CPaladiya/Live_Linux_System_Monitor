@@ -2,6 +2,8 @@
 
 This is a Linux System Monitor implemented as part of course project assigned to me by Udacity. 
 
+<img src="images/LiveLinuxMonitor.gif"/>
+
 # Note
 The entirity of this project is not my work. The code under tagline `//I implemented : -----------` are the code blocks I have personally implemented. NCurses display and rest of the starter code was provided by Udacity. You are welcome to develop this project on your local linux machine.
 
