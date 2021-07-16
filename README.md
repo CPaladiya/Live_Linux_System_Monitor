@@ -1,4 +1,4 @@
-# Linux-Live-System-Monitor
+# Live-Linux-System-Monitor
 
 This is a Linux System Monitor implemented as part of course project assigned to me by Udacity. 
 
