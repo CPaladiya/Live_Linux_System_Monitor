@@ -1,11 +1,17 @@
-# CppND-System-Monitor
+# Linux-Live-System-Monitor
 
 This is a Linux System Monitor implemented as part of course project assigned to me by Udacity. 
 
 <img src="images/LiveLinuxMonitor.gif"/>
 
 # Note
-The entirity of this project is not my work. The code under tagline `//I implemented : -----------` are the code blocks I have personally implemented. NCurses display and rest of the starter code was provided by Udacity. You are welcome to develop this project on your local linux machine.
+The entirity of this project is not my work. The code under tagline `//I implemented : -----------` are the code blocks I have personally implemented. NCurses display and rest of the starter code was provided by Udacity. You are welcome to develop this project on your local linux machine. 
+These are the files I have contributed to:
+`format.cpp`
+`linux_parser.cpp`
+`process.cpp`
+`processor.cpp`
+
 
 ## ncurses
 [ncurses](https://www.gnu.org/software/ncurses/) is a library that facilitates text-based graphical output in the terminal. This project relies on ncurses for display output. Make sure to install ncurses within your own Linux environment: `sudo apt install libncurses5-dev libncursesw5-dev`
