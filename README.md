@@ -7,10 +7,10 @@ This is a Linux System Monitor implemented as part of course project assigned to
 # Note
 The entirity of this project is not my work. The code under tagline `//I implemented : -----------` are the code blocks I have personally implemented. NCurses display and rest of the starter code was provided by Udacity. You are welcome to develop this project on your local linux machine. 
 These are the files I have contributed to:
-`format.cpp`
-`linux_parser.cpp`
-`process.cpp`
-`processor.cpp`
+[`format.cpp`](https://github.com/CPaladiya/09_Live_Linux_System_Monitor/blob/master/src/format.cpp)
+[`linux_parser.cpp`](https://github.com/CPaladiya/09_Live_Linux_System_Monitor/blob/master/src/linux_parser.cpp)
+[`process.cpp`](https://github.com/CPaladiya/09_Live_Linux_System_Monitor/blob/master/src/process.cpp)
+[`processor.cpp`](https://github.com/CPaladiya/09_Live_Linux_System_Monitor/blob/master/src/processor.cpp)
 
 
 ## ncurses
